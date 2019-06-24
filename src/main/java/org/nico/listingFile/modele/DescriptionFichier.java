@@ -1,9 +1,6 @@
 package org.nico.listingFile.modele;
 
 import org.apache.commons.io.FileUtils;
-import org.nico.listingFile.App;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +20,7 @@ public class DescriptionFichier {
 
     private String computeChecksum(File file) {
         try {
-            App.chrono.start("calcul checksum");
             String checksum = Objects.toString(FileUtils.checksumCRC32(file));
-            App.chrono.end();
             return checksum;
         } catch (IOException e) {
             return "checksum non calculé";

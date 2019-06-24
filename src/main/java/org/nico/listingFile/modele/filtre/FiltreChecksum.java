@@ -1,7 +1,6 @@
 package org.nico.listingFile.modele.filtre;
 
-import org.nico.listingFile.WrapperChecksum;
-import org.nico.listingFile.modele.WrapperDescriptionFichiers;
+import org.nico.listingFile.modele.wrapper.WrapperChecksums;
 
 import java.util.AbstractMap;
 import java.util.function.Predicate;
@@ -10,13 +9,13 @@ public enum FiltreChecksum {
     DEFAUT(entry -> true),
     TAILLE(entry -> entry.getValue().getOccurences() > 1);
 
-    private Predicate<? super AbstractMap.SimpleEntry<String, WrapperChecksum>> filter;
+    private Predicate<? super AbstractMap.SimpleEntry<String, WrapperChecksums>> filter;
 
-    FiltreChecksum(Predicate<? super AbstractMap.SimpleEntry<String, WrapperChecksum>> filter) {
+    FiltreChecksum(Predicate<? super AbstractMap.SimpleEntry<String, WrapperChecksums>> filter) {
         this.filter = filter;
     }
 
-    public Predicate<? super AbstractMap.SimpleEntry<String, WrapperChecksum>> getFiltre() {
+    public Predicate<? super AbstractMap.SimpleEntry<String, WrapperChecksums>> getFiltre() {
         return filter;
     }
 }
