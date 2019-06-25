@@ -1,9 +1,9 @@
-package org.nico.clear.algo;
+package org.nico.suppressionsredondances.algo;
 
 import com.google.gson.GsonBuilder;
 import org.apache.commons.io.IOUtils;
-import org.nico.listingFile.modele.DescriptionFichier;
-import org.nico.listingFile.modele.wrapper.Wrapper;
+import org.nico.listingFiles.modele.DescriptionFichier;
+import org.nico.listingFiles.modele.wrapper.Wrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

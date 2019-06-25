@@ -1,8 +1,8 @@
-package org.nico.listingFile.algo;
+package org.nico.listingFiles.algo;
 
-import org.nico.listingFile.modele.DescriptionFichier;
-import org.nico.listingFile.modele.filtre.FiltreParNom;
-import org.nico.listingFile.modele.wrapper.WrapperParNomFichier;
+import org.nico.listingFiles.modele.DescriptionFichier;
+import org.nico.listingFiles.modele.filtre.FiltreParNom;
+import org.nico.listingFiles.modele.wrapper.WrapperParNomFichier;
 
 import java.io.File;
 import java.util.*;

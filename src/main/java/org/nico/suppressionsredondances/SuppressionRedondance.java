@@ -1,7 +1,7 @@
-package org.nico.clear;
+package org.nico.suppressionsredondances;
 
 import org.apache.commons.cli.*;
-import org.nico.clear.algo.AlgoSuppression;
+import org.nico.suppressionsredondances.algo.AlgoSuppression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

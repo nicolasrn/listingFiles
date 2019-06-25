@@ -1,8 +1,8 @@
-package org.nico.listingFile.algo;
+package org.nico.listingFiles.algo;
 
-import org.nico.listingFile.modele.DescriptionFichier;
-import org.nico.listingFile.modele.filtre.FiltreChecksum;
-import org.nico.listingFile.modele.wrapper.WrapperChecksums;
+import org.nico.listingFiles.modele.DescriptionFichier;
+import org.nico.listingFiles.modele.filtre.FiltreChecksum;
+import org.nico.listingFiles.modele.wrapper.WrapperChecksums;
 
 import java.io.File;
 import java.util.*;

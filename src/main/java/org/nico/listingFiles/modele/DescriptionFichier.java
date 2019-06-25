@@ -1,4 +1,4 @@
-package org.nico.listingFile.modele;
+package org.nico.listingFiles.modele;
 
 import org.apache.commons.io.FileUtils;
 

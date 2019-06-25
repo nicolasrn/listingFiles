@@ -1,7 +1,7 @@
-package org.nico.clear.algo;
+package org.nico.suppressionsredondances.algo;
 
 import com.google.gson.reflect.TypeToken;
-import org.nico.listingFile.modele.wrapper.WrapperChecksums;
+import org.nico.listingFiles.modele.wrapper.WrapperChecksums;
 
 import java.lang.reflect.Type;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package org.nico.clear.algo;
+package org.nico.suppressionsredondances.algo;
 
 import java.io.File;
 import java.util.stream.Stream;

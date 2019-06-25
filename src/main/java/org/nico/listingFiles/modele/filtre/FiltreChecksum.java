@@ -1,6 +1,6 @@
-package org.nico.listingFile.modele.filtre;
+package org.nico.listingFiles.modele.filtre;
 
-import org.nico.listingFile.modele.wrapper.WrapperChecksums;
+import org.nico.listingFiles.modele.wrapper.WrapperChecksums;
 
 import java.util.AbstractMap;
 import java.util.function.Predicate;

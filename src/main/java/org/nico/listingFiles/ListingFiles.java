@@ -1,11 +1,11 @@
-package org.nico.listingFile;
+package org.nico.listingFiles;
 
 import com.google.gson.GsonBuilder;
 import org.apache.commons.cli.*;
 import org.nico.chrono.Chrono;
-import org.nico.listingFile.algo.EAlgo;
-import org.nico.listingFile.modele.filtre.FiltreParNom;
-import org.nico.listingFile.modele.wrapper.Wrapper;
+import org.nico.listingFiles.algo.EAlgo;
+import org.nico.listingFiles.modele.filtre.FiltreParNom;
+import org.nico.listingFiles.modele.wrapper.Wrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class App {
+public class ListingFiles {
 
-    private static final Logger LOG = LoggerFactory.getLogger(App.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ListingFiles.class);
     public static Chrono chrono = Chrono.get();
 
     private static String ALGO = null;

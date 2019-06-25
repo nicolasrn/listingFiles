@@ -1,6 +1,6 @@
-package org.nico.listingFile.algo;
+package org.nico.listingFiles.algo;
 
-import org.nico.listingFile.modele.wrapper.Wrapper;
+import org.nico.listingFiles.modele.wrapper.Wrapper;
 
 import java.io.File;
 import java.util.List;

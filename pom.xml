@@ -31,7 +31,7 @@
                             <finalName>listingFile</finalName>
                             <archive>
                                 <manifest>
-                                    <mainClass>org.nico.listingFile.App</mainClass>
+                                    <mainClass>org.nico.listingFiles.ListingFiles</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
