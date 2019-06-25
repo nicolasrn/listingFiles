@@ -19,6 +19,10 @@ public abstract class Wrapper {
         return occurences;
     }
 
+    public List<DescriptionFichier> getFichiers() {
+        return fichiers;
+    }
+
     protected void computeDoublons() {
         int size = fichiers.size();
         if (size == 1) {

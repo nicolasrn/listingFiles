@@ -16,8 +16,8 @@ public class SuppressionRedondance {
         try {
             initCommandLine(args);
             Stream.of(FILES).map(file -> new File(file)).forEach(SuppressionRedondance::traiter);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            LOG.error("erreur inattendue", e);
         }
     }
 
@@ -36,5 +36,4 @@ public class SuppressionRedondance {
         opts.addOption(new Option("f", true, "les fichiers à traiter"));
         return opts;
     }
-
 }

@@ -9,11 +9,13 @@ import java.util.Objects;
 public class DescriptionFichier {
     private final String path;
     private final String checksum;
-    private final String size;
+    private final long size;
+    private final String humainSize;
     private boolean doublon;
 
     public DescriptionFichier(File file) {
-        this.size = FileUtils.byteCountToDisplaySize(FileUtils.sizeOf(file));
+        this.size = FileUtils.sizeOf(file);
+        this.humainSize = FileUtils.byteCountToDisplaySize(size);
         this.path = file.getPath();
         this.checksum = computeChecksum(file);
     }
@@ -33,5 +35,17 @@ public class DescriptionFichier {
 
     public void setDoublon(boolean doublon) {
         this.doublon = doublon;
+    }
+
+    public boolean isDoublon() {
+        return doublon;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public Long getSize() {
+        return size;
     }
 }

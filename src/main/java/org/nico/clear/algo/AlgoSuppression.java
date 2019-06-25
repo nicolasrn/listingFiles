@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 public enum AlgoSuppression {
     CHECKSUM(new SuppressionRedondanceChecksum()),
-    PNOMFICHIER(new SuppressionRedondanceNomFichier());
+    NOMFICHIER(new SuppressionRedondanceNomFichier());
 
     private final AbstractSuppressionRedondance suppressionRedondance;
 
@@ -15,7 +15,7 @@ public enum AlgoSuppression {
 
     public static AlgoSuppression find(String name) {
         return Stream.of(values())
-                .filter(algo -> name.contains(algo.name().toLowerCase()))
+                .filter(algo -> name.toLowerCase().contains(algo.name().toLowerCase()))
                 .findFirst()
                 .get();
     }

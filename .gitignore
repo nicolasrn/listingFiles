@@ -24,4 +24,10 @@ hs_err_pid*
 
 .idea
 *.iml
+
+#projet
 target/
+test*/
+log.txt
+backup/*
+resul*.json
