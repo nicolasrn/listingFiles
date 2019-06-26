@@ -1,6 +1,7 @@
 package org.nico.suppressionsredondances;
 
 import org.apache.commons.cli.*;
+import org.nico.App;
 import org.nico.ITypeApp;
 import org.nico.chrono.Chrono;
 import org.nico.suppressionsredondances.algo.AlgoSuppression;
@@ -32,16 +33,22 @@ public class SuppressionRedondance implements ITypeApp {
     }
 
     private void initCommandLine(String[] args) throws ParseException {
-        CommandLineParser parser = new BasicParser();
-        CommandLine cmd = parser.parse(getOptions(), args);
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(getOptions(), args, true);
+        if (cmd.hasOption("h")) {
+            App.afficherAide("-" + App.Type.SUPPRESSION.name(), this::getOptions);
+            System.exit(0);
+        }
         FILES = cmd.getOptionValues("f");
         DESTINATION = cmd.getOptionValue("d", "./backup");
     }
 
     private Options getOptions() {
         Options opts = new Options();
+        opts.addOption(new Option(App.Type.SUPPRESSION.name(), false, "l'algo courant"));
         opts.addOption(new Option("f", true, "le(s) fichier(s) à traiter"));
         opts.addOption(new Option("d", true, "le répertoire où faire la sauvegarde (par défaut ./backup"));
+        opts.addOption(new Option("h", false, "affiche ce message d'aide"));
         return opts;
     }
 }

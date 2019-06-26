@@ -1,5 +1,6 @@
 package org.nico;
 
+import org.apache.commons.cli.*;
 import org.nico.listingFiles.ListingFiles;
 import org.nico.suppressionsredondances.SuppressionRedondance;
 import org.slf4j.Logger;
@@ -15,19 +16,53 @@ public class App {
 
     public static void main(String args[]) {
         try {
-            args = parseCommandLine(args);
+            args = initCommandLine(args);
             Type.valueOf(TYPE).execute(args);
         } catch (Exception e) {
             LOG.error("erreur inatendue", e);
         }
     }
 
-    private static String[] parseCommandLine(String[] args) {
-        TYPE = args[0];
-        return Stream.of(args).skip(1).toArray(String[]::new);
+    private static String[] initCommandLine(String[] args) {
+        try {
+            CommandLineParser parser = new DefaultParser();
+            CommandLine cmd = parser.parse(getOptions(), args, true);
+            if (args[0].equals("-h")) {
+                afficherAide(null, App::getOptions);
+                System.exit(0);
+            }
+            TYPE = Stream.of(Type.values())
+                    .map(Type::name)
+                    .filter(app -> cmd.hasOption("-" + app))
+                    .findFirst()
+                    .orElseThrow(() -> new Exception("type application non trouvé"));
+            if (!TYPE.isEmpty()) {
+                args = Stream.of(args).filter(arg -> !arg.equals(TYPE)).toArray(String[]::new);
+            }
+            return args;
+        } catch (ParseException e) {
+            afficherAide(null, App::getOptions);
+        } catch (Exception e) {
+            LOG.error("exception non attendue", e);
+        }
+        return args;
     }
 
-    private enum Type {
+    public static void afficherAide(String lineSyntaxe, Supplier<Options> optionsSupplier) {
+        if (lineSyntaxe == null) {
+            lineSyntaxe = "";
+        }
+        new HelpFormatter().printHelp("occurences" + (lineSyntaxe.isEmpty() ? "" : " " + lineSyntaxe), optionsSupplier.get(), true);
+    }
+
+    private static Options getOptions() {
+        Options options = new Options();
+        Stream.of(Type.values()).map(Type::name).map(nom -> new Option(nom, false, "execute le programme " + nom)).forEach(options::addOption);
+        options.addOption("h", false, "affiche cette aide");
+        return options;
+    }
+
+    public enum Type {
         LISTING(ListingFiles::new),
         SUPPRESSION(SuppressionRedondance::new);
 

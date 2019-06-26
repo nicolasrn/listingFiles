@@ -2,6 +2,7 @@ package org.nico.listingFiles;
 
 import com.google.gson.GsonBuilder;
 import org.apache.commons.cli.*;
+import org.nico.App;
 import org.nico.ITypeApp;
 import org.nico.chrono.Chrono;
 import org.nico.listingFiles.algo.EAlgo;
@@ -50,8 +51,12 @@ public class ListingFiles implements ITypeApp {
     }
 
     private void initCommandLine(String[] args) throws ParseException {
-        CommandLineParser parser = new BasicParser();
-        CommandLine cmd = parser.parse(getOptions(), args);
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(getOptions(), args, true);
+        if (cmd.hasOption("h")) {
+            App.afficherAide("-" + App.Type.LISTING.name(), this::getOptions);
+            System.exit(0);
+        }
         ALGO = cmd.getOptionValue("a", EAlgo.DEFAUT.name());
         PATH = cmd.getOptionValue("p", ".");
         FILTRE = cmd.getOptionValue("f", FiltreParNom.DEFAUT.name());
@@ -59,9 +64,11 @@ public class ListingFiles implements ITypeApp {
 
     private Options getOptions() {
         Options opts = new Options();
+        opts.addOption(new Option(App.Type.LISTING.name(), false, "l'algo courant"));
         opts.addOption(new Option("a", true, "l'algo a utiliser " + listeValeursEnum(EAlgo.values())));
         opts.addOption(new Option("p", true, "le chemin depuis lequel lancer la recherche de doublon"));
         opts.addOption(new Option("f", true, "le filtre à appliquer " + getValeursFiltrePossible()));
+        opts.addOption(new Option("h", false, "affiche ce message d'aide"));
         return opts;
     }
 
