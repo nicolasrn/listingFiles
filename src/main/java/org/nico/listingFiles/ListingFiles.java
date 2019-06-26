@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 public class ListingFiles implements ITypeApp {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListingFiles.class);
-    public static Chrono chrono = Chrono.get();
 
     private String ALGO = null;
     private String PATH = null;
@@ -35,16 +34,16 @@ public class ListingFiles implements ITypeApp {
     public void main(String[] args) {
         try {
             initCommandLine(args);
-            chrono.start("récupération des fichiers");
+            Chrono.getInstance().start("récupération des fichiers");
             List<File> files = getFiles(getPath());
-            chrono.end();
-            chrono.start("récupération des informations");
+            Chrono.getInstance().end();
+            Chrono.getInstance().start("récupération des informations");
             Map<String, Wrapper> regrouppement = executeAlgo(files);
-            chrono.end();
-            chrono.start("écriture du résultat");
+            Chrono.getInstance().end();
+            Chrono.getInstance().start("écriture du résultat");
             enregistrer(mettreEnFormeResultat(regrouppement));
-            chrono.end();
-            LOG.debug("\n" + chrono.toString());
+            Chrono.getInstance().end();
+            LOG.debug("\n" + Chrono.getInstance().toString());
         } catch (Exception e) {
             LOG.error("une erreur s'est produite : ", e);
         }

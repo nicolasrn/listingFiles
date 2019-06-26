@@ -7,8 +7,9 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class Chrono {
-    private static final Logger LOG = LoggerFactory.getLogger(Chrono.class);
 
+    public final static Chrono chrono = new Chrono();
+    private static final Logger LOG = LoggerFactory.getLogger(Chrono.class);
     private Deque<Mesure> temps;
     private Deque<Mesure> enCours;
 
@@ -17,8 +18,8 @@ public class Chrono {
         enCours = new ArrayDeque<>();
     }
 
-    public static Chrono get() {
-        return new Chrono();
+    public static Chrono getInstance() {
+        return chrono;
     }
 
     public void start(String name) {

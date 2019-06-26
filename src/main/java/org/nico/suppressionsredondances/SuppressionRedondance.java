@@ -2,6 +2,7 @@ package org.nico.suppressionsredondances;
 
 import org.apache.commons.cli.*;
 import org.nico.ITypeApp;
+import org.nico.chrono.Chrono;
 import org.nico.suppressionsredondances.algo.AlgoSuppression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,9 @@ public class SuppressionRedondance implements ITypeApp {
     public void main(String[] args) {
         try {
             initCommandLine(args);
+            Chrono.getInstance().start("traitement de suppression / backup");
             Stream.of(FILES).map(File::new).forEach(this::traiter);
+            Chrono.getInstance().end();
         } catch (Exception e) {
             LOG.error("erreur inattendue", e);
         }
