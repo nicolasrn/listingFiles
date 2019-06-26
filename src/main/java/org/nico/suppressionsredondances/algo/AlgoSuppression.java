@@ -1,16 +1,17 @@
 package org.nico.suppressionsredondances.algo;
 
 import java.io.File;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public enum AlgoSuppression {
-    CHECKSUM(new SuppressionRedondanceChecksum()),
-    NOMFICHIER(new SuppressionRedondanceNomFichier());
+    CHECKSUM(SuppressionRedondanceChecksum::new),
+    NOMFICHIER(SuppressionRedondanceNomFichier::new);
 
-    private final AbstractSuppressionRedondance suppressionRedondance;
+    private final Function<String, AbstractSuppressionRedondance> initialiseurAlgorithme;
 
-    AlgoSuppression(AbstractSuppressionRedondance suppressionRedondance) {
-        this.suppressionRedondance = suppressionRedondance;
+    AlgoSuppression(Function<String, AbstractSuppressionRedondance> initialiseurAlgorithme) {
+        this.initialiseurAlgorithme = initialiseurAlgorithme;
     }
 
     public static AlgoSuppression find(String name) {
@@ -20,7 +21,7 @@ public enum AlgoSuppression {
                 .get();
     }
 
-    public void execute(File file) {
-        suppressionRedondance.analyserEtTraiter(file);
+    public void execute(File file, String destination) {
+        initialiseurAlgorithme.apply(destination).analyserEtTraiter(file);
     }
 }

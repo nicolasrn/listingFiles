@@ -5,6 +5,7 @@ import org.apache.commons.cli.*;
 import org.nico.ITypeApp;
 import org.nico.chrono.Chrono;
 import org.nico.listingFiles.algo.EAlgo;
+import org.nico.listingFiles.modele.filtre.FiltreChecksum;
 import org.nico.listingFiles.modele.filtre.FiltreParNom;
 import org.nico.listingFiles.modele.wrapper.Wrapper;
 import org.slf4j.Logger;
@@ -18,15 +19,17 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ListingFiles implements ITypeApp {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListingFiles.class);
     public static Chrono chrono = Chrono.get();
 
-    private static String ALGO = null;
-    private static String PATH = null;
-    private static String FILTRE = null;
+    private String ALGO = null;
+    private String PATH = null;
+    private String FILTRE = null;
 
     @Override
     public void main(String[] args) {
@@ -47,7 +50,7 @@ public class ListingFiles implements ITypeApp {
         }
     }
 
-    private static void initCommandLine(String[] args) throws ParseException {
+    private void initCommandLine(String[] args) throws ParseException {
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse(getOptions(), args);
         ALGO = cmd.getOptionValue("a", EAlgo.DEFAUT.name());
@@ -55,19 +58,27 @@ public class ListingFiles implements ITypeApp {
         FILTRE = cmd.getOptionValue("f", FiltreParNom.DEFAUT.name());
     }
 
-    private static Options getOptions() {
+    private Options getOptions() {
         Options opts = new Options();
-        opts.addOption(new Option("a", true, "l'algo a utiliser"));
+        opts.addOption(new Option("a", true, "l'algo a utiliser " + listeValeursEnum(EAlgo.values())));
         opts.addOption(new Option("p", true, "le chemin depuis lequel lancer la recherche de doublon"));
-        opts.addOption(new Option("f", true, "le filtre à appliquer"));
+        opts.addOption(new Option("f", true, "le filtre à appliquer " + getValeursFiltrePossible()));
         return opts;
     }
 
-    private static Path getPath() {
+    private String getValeursFiltrePossible() {
+        return listeValeursEnum(Stream.concat(Stream.of(FiltreParNom.values()), Stream.of(FiltreChecksum.values())).distinct().toArray(Enum[]::new));
+    }
+
+    private String listeValeursEnum(Enum[] values) {
+        return Stream.of(values).map(Enum::name).distinct().collect(Collectors.joining(", "));
+    }
+
+    private Path getPath() {
         return Paths.get(new File(PATH).toURI());
     }
 
-    private static List<File> getFiles(Path path) {
+    private List<File> getFiles(Path path) {
         File current = path.toFile();
         List<File> files = new ArrayList<>();
         for (File child : current.listFiles()) {
@@ -82,15 +93,15 @@ public class ListingFiles implements ITypeApp {
         return files;
     }
 
-    private static Map<String, Wrapper> executeAlgo(List<File> files) {
+    private Map<String, Wrapper> executeAlgo(List<File> files) {
         return EAlgo.valueOf(ALGO).execute(files, FILTRE);
     }
 
-    private static String mettreEnFormeResultat(Map<String, Wrapper> pathParNom) {
+    private String mettreEnFormeResultat(Map<String, Wrapper> pathParNom) {
         return new GsonBuilder().setPrettyPrinting().create().toJson(pathParNom);
     }
 
-    private static void enregistrer(String resultat) {
+    private void enregistrer(String resultat) {
         File fResultat = new File("resultat-" + EAlgo.valueOf(ALGO).name().toLowerCase() + "-" + System.currentTimeMillis() + ".json");
         try (FileOutputStream fos = new FileOutputStream(fResultat); PrintWriter pw = new PrintWriter(fos)) {
             pw.print(resultat);

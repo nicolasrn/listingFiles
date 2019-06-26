@@ -8,6 +8,10 @@ import java.util.Map;
 
 public class SuppressionRedondanceChecksum extends AbstractSuppressionRedondance<WrapperChecksums> {
 
+    public SuppressionRedondanceChecksum(String destination) {
+        super(destination);
+    }
+
     @Override
     protected int getNombreElementAIgnorer() {
         return 1;

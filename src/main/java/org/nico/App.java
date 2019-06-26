@@ -5,6 +5,7 @@ import org.nico.suppressionsredondances.SuppressionRedondance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class App {
@@ -27,17 +28,17 @@ public class App {
     }
 
     private enum Type {
-        LISTING(new ListingFiles()),
-        SUPPRESSION(new SuppressionRedondance());
+        LISTING(ListingFiles::new),
+        SUPPRESSION(SuppressionRedondance::new);
 
-        private ITypeApp app;
+        private Supplier<ITypeApp> initialisateurApp;
 
-        Type(ITypeApp typeApp) {
-            this.app = typeApp;
+        Type(Supplier<ITypeApp> initialisateurApp) {
+            this.initialisateurApp = initialisateurApp;
         }
 
         public void execute(String[] args) {
-            app.main(args);
+            initialisateurApp.get().main(args);
         }
     }
 }

@@ -11,31 +11,34 @@ import java.util.stream.Stream;
 
 public class SuppressionRedondance implements ITypeApp {
     private static final Logger LOG = LoggerFactory.getLogger(SuppressionRedondance.class);
-    private static String[] FILES = null;
+    private String[] FILES = null;
+    private String DESTINATION = null;
 
     @Override
     public void main(String[] args) {
         try {
             initCommandLine(args);
-            Stream.of(FILES).map(file -> new File(file)).forEach(SuppressionRedondance::traiter);
+            Stream.of(FILES).map(File::new).forEach(this::traiter);
         } catch (Exception e) {
             LOG.error("erreur inattendue", e);
         }
     }
 
-    private static void traiter(File file) {
-        AlgoSuppression.find(file.getName()).execute(file);
+    private void traiter(File file) {
+        AlgoSuppression.find(file.getName()).execute(file, DESTINATION);
     }
 
-    private static void initCommandLine(String[] args) throws ParseException {
+    private void initCommandLine(String[] args) throws ParseException {
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse(getOptions(), args);
         FILES = cmd.getOptionValues("f");
+        DESTINATION = cmd.getOptionValue("d", "./backup");
     }
 
-    private static Options getOptions() {
+    private Options getOptions() {
         Options opts = new Options();
-        opts.addOption(new Option("f", true, "les fichiers à traiter"));
+        opts.addOption(new Option("f", true, "le(s) fichier(s) à traiter"));
+        opts.addOption(new Option("d", true, "le répertoire où faire la sauvegarde (par défaut ./backup"));
         return opts;
     }
 }

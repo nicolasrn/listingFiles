@@ -20,8 +20,8 @@ public abstract class AbstractSuppressionRedondance<T extends Wrapper> {
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractSuppressionRedondance.class);
     private final File repertoireDeplacement;
 
-    protected AbstractSuppressionRedondance() {
-        repertoireDeplacement = new File("./backup");
+    protected AbstractSuppressionRedondance(String destination) {
+        repertoireDeplacement = new File(destination);
         if (!repertoireDeplacement.exists()) {
             if (!repertoireDeplacement.mkdirs()) {
                 LOG.error("le repertoire de sauvegarde ne peut être créé");
@@ -53,21 +53,18 @@ public abstract class AbstractSuppressionRedondance<T extends Wrapper> {
                 .collect(Collectors.groupingBy(DescriptionFichier::getSize))
                 .entrySet().stream()
                 .map(Map.Entry::getValue)
-                .forEach(fichiersMemeTaille -> {
-                    fichiersMemeTaille.stream().skip(getNombreElementAIgnorer())
-                            .map(DescriptionFichier::getPath)
-                            .map(File::new)
-                            .forEach(this::supprimer);
-                });
+                .forEach(fichiersMemeTaille -> fichiersMemeTaille.stream().skip(getNombreElementAIgnorer()).forEach(this::supprimer));
     }
 
     protected abstract int getNombreElementAIgnorer();
 
-    protected void supprimer(File file) {
+    protected void supprimer(DescriptionFichier descriptionFichier) {
+        File file = new File(descriptionFichier.getPath());
         if (file.exists()) {
-            File destination = new File(repertoireDeplacement, file.getName());
+            File destination = new File(repertoireDeplacement, file.getName() + "_" + descriptionFichier.getSize() + "_" + descriptionFichier.getChecksum());
             try (FileInputStream input = new FileInputStream(file);
                  FileOutputStream output = new FileOutputStream(destination)) {
+                LOG.debug("deplacement de " + file + " vers " + destination);
                 IOUtils.copy(input, output);
             } catch (Exception e) {
                 new RuntimeException("impossible de copier " + file + " dans " + destination);

@@ -8,6 +8,10 @@ import java.util.Map;
 
 public class SuppressionRedondanceNomFichier extends AbstractSuppressionRedondance<WrapperParNomFichier> {
 
+    public SuppressionRedondanceNomFichier(String destination) {
+        super(destination);
+    }
+
     @Override
     protected int getNombreElementAIgnorer() {
         return 1;
