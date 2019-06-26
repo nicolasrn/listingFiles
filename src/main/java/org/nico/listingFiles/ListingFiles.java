@@ -2,6 +2,7 @@ package org.nico.listingFiles;
 
 import com.google.gson.GsonBuilder;
 import org.apache.commons.cli.*;
+import org.nico.ITypeApp;
 import org.nico.chrono.Chrono;
 import org.nico.listingFiles.algo.EAlgo;
 import org.nico.listingFiles.modele.filtre.FiltreParNom;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ListingFiles {
+public class ListingFiles implements ITypeApp {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListingFiles.class);
     public static Chrono chrono = Chrono.get();
@@ -27,7 +28,8 @@ public class ListingFiles {
     private static String PATH = null;
     private static String FILTRE = null;
 
-    public static void main(String[] args) {
+    @Override
+    public void main(String[] args) {
         try {
             initCommandLine(args);
             chrono.start("récupération des fichiers");

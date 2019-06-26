@@ -1,6 +1,7 @@
 package org.nico.suppressionsredondances;
 
 import org.apache.commons.cli.*;
+import org.nico.ITypeApp;
 import org.nico.suppressionsredondances.algo.AlgoSuppression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,11 +9,12 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.stream.Stream;
 
-public class SuppressionRedondance {
+public class SuppressionRedondance implements ITypeApp {
     private static final Logger LOG = LoggerFactory.getLogger(SuppressionRedondance.class);
     private static String[] FILES = null;
 
-    public static void main(String[] args) {
+    @Override
+    public void main(String[] args) {
         try {
             initCommandLine(args);
             Stream.of(FILES).map(file -> new File(file)).forEach(SuppressionRedondance::traiter);
