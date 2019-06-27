@@ -19,8 +19,10 @@ import java.util.stream.Collectors;
 public abstract class AbstractSuppressionRedondance<T extends Wrapper> {
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractSuppressionRedondance.class);
     private final File repertoireDeplacement;
+    private final boolean soft;
 
-    protected AbstractSuppressionRedondance(String destination) {
+    protected AbstractSuppressionRedondance(String destination, boolean soft) {
+        this.soft = soft;
         repertoireDeplacement = new File(destination);
         if (!repertoireDeplacement.exists()) {
             if (!repertoireDeplacement.mkdirs()) {
@@ -28,6 +30,8 @@ public abstract class AbstractSuppressionRedondance<T extends Wrapper> {
                 throw new RuntimeException("le répertoire de sauvegarde ne peut être créé");
             }
         }
+        LOG.debug("soft: " + soft);
+        LOG.debug("répertoire destination: " + repertoireDeplacement);
     }
 
     public void analyserEtTraiter(File file) {
@@ -61,19 +65,25 @@ public abstract class AbstractSuppressionRedondance<T extends Wrapper> {
     protected void supprimer(DescriptionFichier descriptionFichier) {
         File file = new File(descriptionFichier.getPath());
         if (file.exists()) {
-            File destination = new File(repertoireDeplacement, file.getName() + "_" + descriptionFichier.getSize() + "_" + descriptionFichier.getChecksum());
-            try (FileInputStream input = new FileInputStream(file);
-                 FileOutputStream output = new FileOutputStream(destination)) {
-                LOG.debug("deplacement de " + file + " vers " + destination);
-                IOUtils.copy(input, output);
-            } catch (Exception e) {
-                new RuntimeException("impossible de copier " + file + " dans " + destination);
+            if (soft) {
+                sauvegarderDansBackup(descriptionFichier, file);
             }
             if (!file.delete()) {
                 LOG.error("le fichier " + file + " n'a pas pu être supprimé");
             }
         } else {
             LOG.info("le fichier " + file + " n'existe pas");
+        }
+    }
+
+    private void sauvegarderDansBackup(DescriptionFichier descriptionFichier, File file) {
+        File destination = new File(repertoireDeplacement, file.getName() + "_" + descriptionFichier.getSize() + "_" + descriptionFichier.getChecksum());
+        try (FileInputStream input = new FileInputStream(file);
+             FileOutputStream output = new FileOutputStream(destination)) {
+            LOG.debug("deplacement de " + file + " vers " + destination);
+            IOUtils.copy(input, output);
+        } catch (Exception e) {
+            new RuntimeException("impossible de copier " + file + " dans " + destination);
         }
     }
 

@@ -15,6 +15,7 @@ public class SuppressionRedondance implements ITypeApp {
     private static final Logger LOG = LoggerFactory.getLogger(SuppressionRedondance.class);
     private String[] FILES = null;
     private String DESTINATION = null;
+    private boolean SOFT = true;
 
     @Override
     public void main(String[] args) {
@@ -29,7 +30,7 @@ public class SuppressionRedondance implements ITypeApp {
     }
 
     private void traiter(File file) {
-        AlgoSuppression.find(file.getName()).execute(file, DESTINATION);
+        AlgoSuppression.find(file.getName()).execute(file, DESTINATION, SOFT);
     }
 
     private void initCommandLine(String[] args) throws ParseException {
@@ -41,14 +42,16 @@ public class SuppressionRedondance implements ITypeApp {
         }
         FILES = cmd.getOptionValues("f");
         DESTINATION = cmd.getOptionValue("d", "./backup");
+        SOFT = Boolean.parseBoolean(cmd.getOptionValue("s", "true"));
     }
 
     private Options getOptions() {
         Options opts = new Options();
         opts.addOption(new Option(App.Type.SUPPRESSION.name(), false, "l'algo courant"));
-        opts.addOption(new Option("f", true, "le(s) fichier(s) à traiter"));
-        opts.addOption(new Option("d", true, "le répertoire où faire la sauvegarde (par défaut ./backup"));
-        opts.addOption(new Option("h", false, "affiche ce message d'aide"));
+        opts.addOption(new Option("f", "file",true, "le(s) fichier(s) à traiter"));
+        opts.addOption(new Option("d", "destination", true, "le répertoire où faire la sauvegarde (par défaut ./backup"));
+        opts.addOption(new Option("s", "soft", true, "prend pour valeur true ou false, indique si un backup doit être effectué (par défaut true)"));
+        opts.addOption(new Option("h", "help", false, "affiche ce message d'aide"));
         return opts;
     }
 }

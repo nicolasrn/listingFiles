@@ -58,7 +58,7 @@ public class App {
     private static Options getOptions() {
         Options options = new Options();
         Stream.of(Type.values()).map(Type::name).map(nom -> new Option(nom, false, "execute le programme " + nom)).forEach(options::addOption);
-        options.addOption("h", false, "affiche cette aide");
+        options.addOption("h", "help", false, "affiche cette aide");
         return options;
     }
 

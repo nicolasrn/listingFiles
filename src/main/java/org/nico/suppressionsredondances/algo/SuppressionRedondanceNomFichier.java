@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class SuppressionRedondanceNomFichier extends AbstractSuppressionRedondance<WrapperParNomFichier> {
 
-    public SuppressionRedondanceNomFichier(String destination) {
-        super(destination);
+    public SuppressionRedondanceNomFichier(String destination, boolean soft) {
+        super(destination, soft);
     }
 
     @Override

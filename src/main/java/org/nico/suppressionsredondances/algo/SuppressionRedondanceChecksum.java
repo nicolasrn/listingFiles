@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class SuppressionRedondanceChecksum extends AbstractSuppressionRedondance<WrapperChecksums> {
 
-    public SuppressionRedondanceChecksum(String destination) {
-        super(destination);
+    public SuppressionRedondanceChecksum(String destination, boolean soft) {
+        super(destination, soft);
     }
 
     @Override

@@ -17,7 +17,9 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -65,10 +67,10 @@ public class ListingFiles implements ITypeApp {
     private Options getOptions() {
         Options opts = new Options();
         opts.addOption(new Option(App.Type.LISTING.name(), false, "l'algo courant"));
-        opts.addOption(new Option("a", true, "l'algo a utiliser " + listeValeursEnum(EAlgo.values())));
-        opts.addOption(new Option("p", true, "le chemin depuis lequel lancer la recherche de doublon"));
-        opts.addOption(new Option("f", true, "le filtre à appliquer " + getValeursFiltrePossible()));
-        opts.addOption(new Option("h", false, "affiche ce message d'aide"));
+        opts.addOption(new Option("a", "algo", true, "l'algo a utiliser " + listeValeursEnum(EAlgo.values())));
+        opts.addOption(new Option("p", "path", true, "le chemin depuis lequel lancer la recherche de doublon"));
+        opts.addOption(new Option("f", "filtre", true, "le filtre à appliquer " + getValeursFiltrePossible()));
+        opts.addOption(new Option("h", "help", false, "affiche ce message d'aide"));
         return opts;
     }
 
@@ -108,7 +110,8 @@ public class ListingFiles implements ITypeApp {
     }
 
     private void enregistrer(String resultat) {
-        File fResultat = new File("resultat-" + EAlgo.valueOf(ALGO).name().toLowerCase() + "-" + System.currentTimeMillis() + ".json");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss");
+        File fResultat = new File("resultat-" + EAlgo.valueOf(ALGO).name().toLowerCase() + "-" + simpleDateFormat.format(new Date()) + ".json");
         try (FileOutputStream fos = new FileOutputStream(fResultat); PrintWriter pw = new PrintWriter(fos)) {
             pw.print(resultat);
         } catch (Exception e) {
