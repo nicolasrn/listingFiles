@@ -32,19 +32,32 @@ public class ListingFiles implements ITypeApp {
     private String ALGO = null;
     private String PATH = null;
     private String FILTRE = null;
+    private List<File> fichiersSorties;
+
+    public ListingFiles() {
+        fichiersSorties = new ArrayList<>();
+    }
 
     @Override
     public void main(String[] args) {
         try {
             initCommandLine(args);
+            execute(ALGO, PATH, FILTRE);
+        } catch (Exception e) {
+            LOG.error("une erreur s'est produite : ", e);
+        }
+    }
+
+    public void execute(String algo, String path, String filtre) {
+        try {
             Chrono.getInstance().start("récupération des fichiers");
-            List<File> files = getFiles(getPath());
+            List<File> files = getFiles(getPath(path));
             Chrono.getInstance().end();
             Chrono.getInstance().start("récupération des informations");
-            Map<String, Wrapper> regrouppement = executeAlgo(files);
+            Map<String, Wrapper> regrouppement = executeAlgo(files, algo, filtre);
             Chrono.getInstance().end();
             Chrono.getInstance().start("écriture du résultat");
-            enregistrer(mettreEnFormeResultat(regrouppement));
+            enregistrer(mettreEnFormeResultat(regrouppement), algo);
             Chrono.getInstance().end();
             LOG.debug("\n" + Chrono.getInstance().toString());
         } catch (Exception e) {
@@ -82,8 +95,8 @@ public class ListingFiles implements ITypeApp {
         return Stream.of(values).map(Enum::name).distinct().collect(Collectors.joining(", "));
     }
 
-    private Path getPath() {
-        return Paths.get(new File(PATH).toURI());
+    private Path getPath(String path) {
+        return Paths.get(new File(path).toURI());
     }
 
     private List<File> getFiles(Path path) {
@@ -101,21 +114,26 @@ public class ListingFiles implements ITypeApp {
         return files;
     }
 
-    private Map<String, Wrapper> executeAlgo(List<File> files) {
-        return EAlgo.valueOf(ALGO).execute(files, FILTRE);
+    private Map<String, Wrapper> executeAlgo(List<File> files, String algo, String filtre) {
+        return EAlgo.valueOf(algo).execute(files, filtre);
     }
 
     private String mettreEnFormeResultat(Map<String, Wrapper> pathParNom) {
         return new GsonBuilder().setPrettyPrinting().create().toJson(pathParNom);
     }
 
-    private void enregistrer(String resultat) {
+    private void enregistrer(String resultat, String algo) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss");
-        File fResultat = new File("resultat-" + EAlgo.valueOf(ALGO).name().toLowerCase() + "-" + simpleDateFormat.format(new Date()) + ".json");
+        File fResultat = new File("resultat-" + EAlgo.valueOf(algo).name().toLowerCase() + "-" + simpleDateFormat.format(new Date()) + ".json");
+        fichiersSorties.add(fResultat);
         try (FileOutputStream fos = new FileOutputStream(fResultat); PrintWriter pw = new PrintWriter(fos)) {
             pw.print(resultat);
         } catch (Exception e) {
             LOG.error("une erreur s'est produite : ", e);
         }
+    }
+
+    public List<File> getFichiersGeneres() {
+        return fichiersSorties;
     }
 }

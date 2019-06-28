@@ -21,16 +21,24 @@ public class SuppressionRedondance implements ITypeApp {
     public void main(String[] args) {
         try {
             initCommandLine(args);
+            execute(FILES, DESTINATION, SOFT);
+        } catch (Exception e) {
+            LOG.error("erreur inattendue", e);
+        }
+    }
+
+    public void execute(String[] files, String destination, boolean soft) {
+        try {
             Chrono.getInstance().start("traitement de suppression / backup");
-            Stream.of(FILES).map(File::new).forEach(this::traiter);
+            Stream.of(files).map(File::new).forEach(file -> traiter(file, destination, soft));
             Chrono.getInstance().end();
         } catch (Exception e) {
             LOG.error("erreur inattendue", e);
         }
     }
 
-    private void traiter(File file) {
-        AlgoSuppression.find(file.getName()).execute(file, DESTINATION, SOFT);
+    private void traiter(File file, String destination, boolean soft) {
+        AlgoSuppression.find(file.getName()).execute(file, destination, soft);
     }
 
     private void initCommandLine(String[] args) throws ParseException {
@@ -48,7 +56,7 @@ public class SuppressionRedondance implements ITypeApp {
     private Options getOptions() {
         Options opts = new Options();
         opts.addOption(new Option(App.Type.SUPPRESSION.name(), false, "l'algo courant"));
-        opts.addOption(new Option("f", "file",true, "le(s) fichier(s) à traiter"));
+        opts.addOption(new Option("f", "file", true, "le(s) fichier(s) à traiter"));
         opts.addOption(new Option("d", "destination", true, "le répertoire où faire la sauvegarde (par défaut ./backup"));
         opts.addOption(new Option("s", "soft", true, "prend pour valeur true ou false, indique si un backup doit être effectué (par défaut true)"));
         opts.addOption(new Option("h", "help", false, "affiche ce message d'aide"));

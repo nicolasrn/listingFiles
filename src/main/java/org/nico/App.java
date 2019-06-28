@@ -1,6 +1,7 @@
 package org.nico;
 
 import org.apache.commons.cli.*;
+import org.nico.combine.ListingAndRemove;
 import org.nico.listingFiles.ListingFiles;
 import org.nico.suppressionsredondances.SuppressionRedondance;
 import org.slf4j.Logger;
@@ -64,7 +65,8 @@ public class App {
 
     public enum Type {
         LISTING(ListingFiles::new),
-        SUPPRESSION(SuppressionRedondance::new);
+        SUPPRESSION(SuppressionRedondance::new),
+        LISTING_AND_REMOVE(ListingAndRemove::new);
 
         private Supplier<ITypeApp> initialisateurApp;
 

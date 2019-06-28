@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,7 +25,8 @@ public abstract class AbstractSuppressionRedondance<T extends Wrapper> {
 
     protected AbstractSuppressionRedondance(String destination, boolean soft) {
         this.soft = soft;
-        repertoireDeplacement = new File(destination);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss");
+        repertoireDeplacement = new File(destination + File.separator + "backup_" + simpleDateFormat.format(new Date()));
         if (!repertoireDeplacement.exists()) {
             if (!repertoireDeplacement.mkdirs()) {
                 LOG.error("le repertoire de sauvegarde ne peut être créé");
