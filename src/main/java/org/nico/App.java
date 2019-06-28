@@ -15,7 +15,7 @@ public class App {
 
     private static String TYPE;
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             args = initCommandLine(args);
             Type.valueOf(TYPE).execute(args);

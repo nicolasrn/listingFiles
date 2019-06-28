@@ -2,7 +2,6 @@ package org.nico.suppressionsredondances.algo;
 
 import java.io.File;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public enum AlgoSuppression {
